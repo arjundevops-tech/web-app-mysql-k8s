@@ -28,7 +28,7 @@ pipeline {
                 script {
                     def SONAR_SCANNER_HOME =  tool name: 'sonar-scanner'
                         sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner --version"
-                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=python-application -Dsonar.login=1234 -Dsonar.host.url=http://54.235.29.9:9000"
+                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=python-application -Dsonar.login=sqa_6c072c2bb0d29fe51fbdfc02724f295d96a3cc07 -Dsonar.host.url=http://54.235.29.9:9000"
                 }
             }
         }
