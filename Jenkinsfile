@@ -15,7 +15,11 @@ pipeline {
         stage ('Dependecy scan') {
             steps {
                 script {
-                    sh "dependency-check --scan requirements.txt --out reports --format HTML"
+                    //sh "dependency-check --scan requirements.txt --out reports --format HTML"
+                    dependencyCheckAnalyzer outdir: 'reports',
+                                        scanpath: '.',
+                                        format: 'ALL'   // XML, HTML, JSON
+                    dependencyCheckPublisher pattern: 'reports/dependency-check-report.xml'
                 }
             }
         }
