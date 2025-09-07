@@ -1,6 +1,6 @@
 pipeline {
     agent any 
-    environments {
+    environment {
         AWS_ECR_REPOSITORY_URL = "965220894814.dkr.ecr.us-east-1.amazonaws.com"
         WEB_APP_ECR_REPO_NAME = 'web-app'   
     }
