@@ -20,7 +20,7 @@ pipeline {
                         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                         sh "ls la"
                         
-
+                    }
                 }
             }
         }
