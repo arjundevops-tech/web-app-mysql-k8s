@@ -70,6 +70,7 @@ pipeline {
                         sh "docker push ${AWS_ECR_REPOSITORY_URL}/${WEB_APP_ECR_REPO_NAME}:${env.IMAGE_TAG}"
                 }
             }
+          }
         }
     }
 }
