@@ -17,7 +17,7 @@ pipeline {
                 script {
                     sh "dependencyCheck '--scan ./ ',odcInstallation: 'DP'"
                     archiveArtifacts artifacts: 'reports/dependency-check-report.html', fingerprint: true    
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                     sh "ls la"
                     
 
