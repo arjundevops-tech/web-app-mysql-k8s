@@ -1,58 +1,37 @@
 from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-# Temporary in-memory "database"
-users = {}  # key = email, value = dict(username, password_hash)
+# Dummy user credentials
+USER = {"email": "test@example.com", "password": "1234"}
 
-
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-
-        if email in users:
-            return "Email already registered. Please log in."
-
-        hashed_password = generate_password_hash(password, method='sha256')
-        users[email] = {
-            'username': username,
-            'password': hashed_password
-        }
-        return redirect(url_for('login'))
-
-    return render_template('register.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
 
-        user = users.get(email)
-
-        if user and check_password_hash(user['password'], password):
-            return redirect(url_for('dashboard', username=user['username']))
+        if email == USER["email"] and password == USER["password"]:
+            # Just redirect to dashboard, no session
+            return redirect(url_for("dashboard"))
         else:
-            return "Invalid email or password."
+            return "Invalid credentials. Try again."
 
-    return render_template('login.html')
+    return render_template("login.html")
 
-
-@app.route('/dashboard')
+@app.route("/dashboard")
 def dashboard():
-    # In a real app, you'd check login state, but here we just show a simple page
-    return render_template('dashboard.html')
+    # No session check, always accessible
+    return render_template("dashboard.html", username=USER["email"])
 
+@app.route("/logout")
+def logout():
+    # Just redirect back to index
+    return redirect(url_for("index"))
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
