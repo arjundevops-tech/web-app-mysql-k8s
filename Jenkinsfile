@@ -15,10 +15,11 @@ pipeline {
         stage ('Dependency scan') {
             steps {
                 script {
-                    dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'dependecy-tool'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                    sh "ls la"
-                    
+                    withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+                        dependencyCheck additionalArguments: "--scan ./ --nvdApiKey $NVD_API_KEY", odcInstallation: 'dependecy-tool'
+                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                        sh "ls la"
+                        
 
                 }
             }
