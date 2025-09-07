@@ -61,6 +61,14 @@ pipeline {
                   )
              }
           }
-        }              
+        }  
+        stage ('Pushing image into aws ECR') {
+            steps {
+                script {
+                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${AWS_ECR_REPOSITORY_URL}"
+                    sh "docker push ${AWS_ECR_REPOSITORY_URL}/${WEB_APP_ECR_REPO_NAME}:${env.IMAGE_TAG}"
+                }
+            }
+        }
     }
 }
