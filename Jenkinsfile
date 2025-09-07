@@ -15,7 +15,12 @@ pipeline {
         stage ('Dependecy scan') {
             steps {
                 script {
-                    sh "dependencyCheck additionalArguments: --scan requirements.txt --out reports --format HTML"
+                    dependencyCheckAnalyzer outdir: 'reports',
+                            scanpath: 'requirements.txt',
+                            format: 'ALL',
+                            additionalArguments: '--enableExperimental'
+                    sh "ls la"
+                    
 
                 }
             }
