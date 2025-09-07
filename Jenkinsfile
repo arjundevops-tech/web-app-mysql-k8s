@@ -1,88 +1,33 @@
 pipeline {
-    agent any
-    environment {
-        AWS_ECR_REPOSITORY_URL = "654654348225.dkr.ecr.us-east-2.amazonaws.com"
-        WEB_APP_ECR_REPO_NAME = 'web-app'
-        MYSQL_ECR_REPO_NAME = "mysql-db"
+    agent any 
+    environments {
+        AWS_ECR_REPOSITORY_URL = "965220894814.dkr.ecr.us-east-1.amazonaws.com"
+        WEB_APP_ECR_REPO_NAME = 'web-app'   
     }
     stages {
-        stage('Install dependencies') {
+        stage ('install dependencies') {
             steps {
                 script {
-                    sh "pip3 install -r requirements.txt"
+                    sh "pip install -r requirements.txt"
                 }
             }
         }
-        stage('Unit test') {
+        stage ('Dependecy scan') {
             steps {
                 script {
-                    try {
-                        sh "pytest"
-                    } catch (Exception e) {
-                        println("No unit tests are there in my test source code")
+                    sh "dependency-check --scan requirements.txt --out reports --format HTML"
+                }
+            }
+        }
+        stage ('sonar analysis') {
+            steps {
+                script {
+                    def SONAR_SCANNER_HOME =  tool name: 'sonar-scanner'
+                    withSonarQubeEnv('sonar'){
+                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner --version"
+                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projecKey=python-application"
                     }
                 }
             }
         }
-        stage('Sonar code quality analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'sonarscanner'
-                    withSonarQubeEnv('sonar') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=test"
-                    }
-                }
-            }
-        }
-        stage ('Build web app docker image') {
-            steps {
-                script {
-                    sh "docker build -t ${AWS_ECR_REPOSITORY_URL}/${WEB_APP_ECR_REPO_NAME}:${BUILD_NUMBER} ."
-                }
-            }
-        }
-        stage('Publish web app image into aws ecr') {
-            steps {
-                script {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'eks-credentials']]) {
-                  sh """
-                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                        export AWS_DEFAULT_REGION=us-east-2
-                        aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${AWS_ECR_REPOSITORY_URL}
-                        docker push ${AWS_ECR_REPOSITORY_URL}/${WEB_APP_ECR_REPO_NAME}:${BUILD_NUMBER}
-                  """
-            
-                }
-            }
-         }
-        }
-        stage ('Build mysql docker image') {
-            steps {
-                script {
-                    sh """
-                    cd mysql-db
-                    docker build -t ${AWS_ECR_REPOSITORY_URL}/${MYSQL_ECR_REPO_NAME}:${BUILD_NUMBER} .
-                    """
-                }
-            }
-        }
-        stage('Publish mysql image into aws ecr') {
-            steps {
-                script {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'eks-credentials']]) {
-                  sh """
-                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                        export AWS_DEFAULT_REGION=us-east-2
-                        aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${AWS_ECR_REPOSITORY_URL}
-                        docker push ${AWS_ECR_REPOSITORY_URL}/${MYSQL_ECR_REPO_NAME}:${BUILD_NUMBER}
-                  """
-            
-                }
-            }
-        }
-        }
-                    
     }
-}
