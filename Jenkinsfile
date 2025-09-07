@@ -4,6 +4,9 @@ pipeline {
         AWS_ECR_REPOSITORY_URL = "965220894814.dkr.ecr.us-east-1.amazonaws.com"
         WEB_APP_ECR_REPO_NAME = 'web-app'   
     }
+    tools {
+        dependencyCheck 'dependecy-tool'   // <-- must match the name you set in Jenkins Tools config
+    }
     stages {
         stage ('install dependencies') {
             steps {
@@ -12,17 +15,14 @@ pipeline {
                 }
             }
         }
-        // stage ('Dependecy scan') {
-        //     steps {
-        //         script {
-        //             //sh "dependency-check --scan requirements.txt --out reports --format HTML"
-        //             dependencyCheckAnalyzer outdir: 'reports',
-        //                                 scanpath: '.',
-        //                                 format: 'ALL'   // XML, HTML, JSON
-        //             dependencyCheckPublisher pattern: 'reports/dependency-check-report.xml'
-        //         }
-        //     }
-        // }
+        stage ('Dependecy scan') {
+            steps {
+                script {
+                    sh "dependencyCheck additionalArguments: --scan requirements.txt --out reports --format HTML"
+
+                }
+            }
+        }
         stage ('sonar analysis') {
             steps {
                 script {
