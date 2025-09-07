@@ -4,9 +4,6 @@ pipeline {
         AWS_ECR_REPOSITORY_URL = "965220894814.dkr.ecr.us-east-1.amazonaws.com"
         WEB_APP_ECR_REPO_NAME = 'web-app'   
     }
-    tools {
-        dependencyCheck 'dependecy-tool'   // <-- must match the name you set in Jenkins Tools config
-    }
     stages {
         stage ('install dependencies') {
             steps {
