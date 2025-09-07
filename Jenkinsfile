@@ -29,7 +29,7 @@ pipeline {
                     def SONAR_SCANNER_HOME =  tool name: 'sonar-scanner'
                     withSonarQubeEnv('sonar'){
                         sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner --version"
-                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner  -Dsonar.projectKey=python-application"
+                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=python-application -Dsonar.login=sqa_ea508247dede6d75c3c69903082d722f2886b0a8 -Dsonar.host.url=http://54.235.29.9:9000"
                     }
                 }
             }
