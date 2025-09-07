@@ -29,7 +29,7 @@ pipeline {
                     def SONAR_SCANNER_HOME =  tool name: 'sonar-scanner'
                     withSonarQubeEnv('sonar'){
                         sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner --version"
-                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projecKey=python-application"
+                        sh "${SONAR_SCANNER_HOME}/bin/sonar-scanner  -Dsonar.projectKey=python-application"
                     }
                 }
             }
