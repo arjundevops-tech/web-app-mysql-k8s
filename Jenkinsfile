@@ -1,3 +1,5 @@
+@Library('shared_libraries@main) _
+
 pipeline {
     agent any 
     environment {
@@ -40,14 +42,25 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'nexus-creds', passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USER_NAME')]) {
                          def DATE_TIME = sh(script: "date +%Y%m%d-%H%M%S", returnStdout: true).trim()
                          def arifactName = "python-web-application_${DATE_TIME}"
-                         sh "zip -r python-web-application_${DATE_TIME}.zip ."
+                         sh "zip -r ${arifactName}.zip ."
                          sh """
-                         curl -u ${NEXUS_USER_NAME}:'${NEXUS_PASSWORD}' --upload-file python-web-application_${DATE_TIME}.zip  'http://54.235.29.9:8081/repository/python-application-repo/python-web-application_${DATE_TIME}.zip'
+                         curl -u ${NEXUS_USER_NAME}:'${NEXUS_PASSWORD}' --upload-file ${arifactName}.zip  'http://54.235.29.9:8081/repository/python-application-repo/${arifactName}.zip'
                          """
                    }
-
              }
           }
+            
         }
+        stage ('Building Image') {
+            steps {
+                script {
+                    building_image(
+                        imageName : "${AWS_ECR_REPOSITORY_URL}/${WEB_APP_ECR_REPO_NAME}",
+                        dockerfile : 'Dockerfile',
+                        buildContext : '.'
+                  )
+             }
+          }
+        }              
     }
 }
