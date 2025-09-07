@@ -12,11 +12,12 @@ pipeline {
                 }
             }
         }
-        stage ('Dependecy scan') {
+        stage ('Dependency scan') {
             steps {
                 script {
-                    sh 'dependency-check --scan requirements.txt --out reports --format HTML'
+                    sh "dependencyCheck '--scan ./ ',odcInstallation: 'DP'"
                     archiveArtifacts artifacts: 'reports/dependency-check-report.html', fingerprint: true    
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml
                     sh "ls la"
                     
 
