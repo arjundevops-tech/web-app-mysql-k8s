@@ -2,7 +2,7 @@
 pipeline {
     agent {
         docker {
-            image 'dharimigariarjun/devops-tools-image:20250913-125932'
+            image 'dharimigariarjun/devops-tools-image:20250913-132615'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
