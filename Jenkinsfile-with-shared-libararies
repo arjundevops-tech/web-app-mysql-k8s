@@ -1,11 +1,11 @@
 @Library('shared_librareis@main') _
 pipeline {
-  agent {
-    docker {
-      image 'dharimigariarjun/devops-tools-image:20250913-124024'
-   
-     }
- }
+    agent {
+        docker {
+            image 'dharimigariarjun/devops-tools-image:20250913-124024'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
  stages {
   stage ('Checking version') {
    steps {
