@@ -1,0 +1,5 @@
+@Library('shared_librareis@main) _
+pipeline {
+  agen {
+    docker {
+      image: 
