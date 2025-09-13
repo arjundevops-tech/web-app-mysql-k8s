@@ -2,7 +2,7 @@
 pipeline {
   agent {
     docker {
-      image: 'dharimigariarjun/devops-tools-image:20250913-124024'
+      image 'dharimigariarjun/devops-tools-image:20250913-124024'
    
      }
  }
