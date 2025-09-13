@@ -20,7 +20,7 @@ pipeline {
 stage ('Install dependecies') {
    steps {
     script {
-     Create python_dependencies()
+     python_dependencies()
     }
    }
   }
