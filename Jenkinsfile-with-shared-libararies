@@ -32,7 +32,7 @@ stage ('Install dependecies') {
   }
 }
 stage ('sonar analysis') { 
-  stpes {
+  steps {
    script {
      sonar_analysis(
        toolName : "sonar-scanner",
