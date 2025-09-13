@@ -1,5 +1,21 @@
-@Library('shared_librareis@main) _
+@Library('shared_librareis@main') _
 pipeline {
-  agen {
+  agent {
     docker {
-      image: 
+      image: 'dharimigariarjun/devops-tools-image:20250913-124024'
+   
+     }
+ }
+ stages {
+  stage ('Checking version') {
+   steps {
+     script {
+       sh "python --version"
+       sh "docker --version"
+       sh "git --version"
+    }
+  }
+ }
+}
+}
+
