@@ -13,6 +13,7 @@ pipeline {
        sh "python --version"
        sh "docker --version"
        sh "git --version"
+       sh "sleep 60"
     }
   }
  }
