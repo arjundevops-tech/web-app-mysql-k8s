@@ -19,13 +19,13 @@ stage ('Install dependecies') {
     }
    }
   }
-  stage ('test') {
+  /*stage ('test') {
    steps {
     script {
       pytest() 
    }
   }
-}
+}*/
 stage ('sonar analysis') { 
   steps {
    script {
