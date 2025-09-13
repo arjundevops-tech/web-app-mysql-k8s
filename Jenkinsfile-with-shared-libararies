@@ -5,7 +5,7 @@ pipeline {
   stage ('Checking version') {
    steps {
      script {
-       sh "python --version"
+       sh "python3 --version"
        sh "docker --version"
        sh "git --version"
        sh "trivy --version"
